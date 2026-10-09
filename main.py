@@ -526,12 +526,41 @@ async def get_experiments():
 # OPTIONAL: MODEL STATUS
 # ============================================================
 
-
 @app.get("/api/status")
 async def get_status():
-    """
-    Return current backend/model status.
-    """
+    required_artifacts = [
+        "word2vec_lstm.keras",
+        "vocab.json",
+        "labels.json",
+        "label_to_group.json",
+    ]
+
+    artifacts = {}
+
+    for filename in required_artifacts:
+        path = ARTIFACT_DIR / filename
+
+        artifacts[filename] = {
+            "exists": path.exists(),
+            "size_mb": (
+                round(
+                    path.stat().st_size / (1024 * 1024),
+                    2,
+                )
+                if path.exists()
+                else None
+            ),
+        }
+
+    return {
+        "status": "ok",
+        "model_loaded": _classifier is not None,
+        "artifacts": artifacts,
+    }
+"""
+@app.get("/api/status")
+async def get_status():
+
 
     required_artifacts = [
         "word2vec_lstm.keras",
@@ -564,7 +593,7 @@ async def get_status():
         "model_loaded": _classifier is not None,
         "artifacts": artifacts,
     }
-
+"""
 
 # ============================================================
 # LOCAL DEVELOPMENT
