@@ -43,7 +43,21 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\.venv\Scripts\Activate.ps1
 ```
 
-## 3. Chạy web
+## 3. Chạy dashboard HTML/CSS/JavaScript
+
+Chạy giao diện dashboard mới (phục vụ HTML và API dự đoán tại cùng một địa chỉ):
+
+```powershell
+python server.py
+```
+
+Mở `http://127.0.0.1:8000`. JavaScript gửi nội dung và ngưỡng tới `POST /api/predict`; server dùng lại `NewsClassifier` và các artifact đã huấn luyện. Có thể đổi địa chỉ bind/cổng bằng `--host` và `--port`.
+
+Các trang Semantic Labels và Kết quả thực nghiệm tự hiển thị trạng thái chưa có dữ liệu nếu artifact tùy chọn tương ứng chưa được tạo.
+
+## 4. Chạy giao diện Streamlit hiện có
+
+Giao diện Streamlit cũ vẫn có thể chạy độc lập:
 
 ```powershell
 streamlit run app.py
@@ -51,7 +65,7 @@ streamlit run app.py
 
 Sau đó mở địa chỉ Streamlit hiện trong terminal, thường là `http://localhost:8501`.
 
-## 4. Artifact bắt buộc
+## 5. Artifact bắt buộc
 
 Chỉ cần 4 file để chạy trang dự đoán:
 
@@ -62,7 +76,7 @@ Chỉ cần 4 file để chạy trang dự đoán:
 
 Các CSV/NPY còn lại phục vụ trang giải thích và thực nghiệm.
 
-## 5. Pipeline inference
+## 6. Pipeline inference
 
 ```text
 Raw Vietnamese text

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101827">
+    <title>Vietnamese News Intelligence</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/script.js" defer></script>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="/" aria-label="Vietnamese News Intelligence, trang chủ">
+                <span class="brand-mark" aria-hidden="true">N</span>
+                <span class="brand-copy"><strong>News Intelligence</strong><small>VIETNAMESE AI</small></span>
+            </a>
+            <p class="nav-heading">KHÔNG GIAN LÀM VIỆC</p>
+            <nav class="primary-nav" aria-label="Điều hướng chính">
+                <button class="nav-link active" type="button" data-page="classify">
+                    <span class="nav-icon" aria-hidden="true">✳</span> Phân loại
+                </button>
+                <button class="nav-link" type="button" data-page="model">
+                    <span class="nav-icon" aria-hidden="true">◈</span> Mô hình
+                </button>
+                <button class="nav-link" type="button" data-page="semantic">
+                    <span class="nav-icon" aria-hidden="true">⌘</span> Semantic Labels
+                </button>
+                <button class="nav-link" type="button" data-page="experiments">
+                    <span class="nav-icon" aria-hidden="true">▤</span> Kết quả thực nghiệm
+                </button>
+            </nav>
+            <div class="sidebar-bottom">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span id="service-status">Đang kết nối với mô hình...</span>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div class="breadcrumbs"><span>Workspace</span><span aria-hidden="true">/</span><strong id="breadcrumb-current">Phân loại</strong></div>
+                <div class="topbar-meta"><span class="model-pill"><span class="status-dot" aria-hidden="true"></span> Word2Vec + LSTM</span></div>
+            </header>
+
+            <section class="page active" id="page-classify" data-title="Phân loại">
+                <div class="hero">
+                    <div class="hero-copy">
+                        <span class="eyebrow"><span class="eyebrow-dot"></span> AI-POWERED NEWSROOM</span>
+                        <h1>Hiểu câu chuyện.<br><span>Khám phá chủ đề.</span></h1>
+                        <p>Phân tích nội dung tin tức tiếng Việt với mô hình phân loại đa nhãn và gom nhóm ngữ nghĩa.</p>
+                    </div>
+                    <div class="hero-art" aria-hidden="true">
+                        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+                        <span class="orbit-core">N</span><span class="orbit-node node-one">AI</span><span class="orbit-node node-two">08</span>
+                    </div>
+                </div>
+
+                <div class="section-heading">
+                    <div><p class="eyebrow eyebrow-dark">PHÂN TÍCH NỘI DUNG</p><h2>Bắt đầu với một bài viết</h2></div>
+                    <span class="subtle-badge">Phân loại đa nhãn</span>
+                </div>
+                <div class="workspace-grid">
+                    <form class="panel input-panel" id="predict-form">
+                        <div class="panel-heading">
+                            <div><span class="step-label">01 <span>·</span> NỘI DUNG</span><h3>Văn bản bài viết</h3></div>
+                            <span class="language-tag">VI</span>
+                        </div>
+                        <label class="sr-only" for="article-text">Nội dung bài viết tiếng Việt</label>
+                        <textarea id="article-text" name="text" maxlength="50000" placeholder="Dán nội dung bài báo tiếng Việt vào đây..." required></textarea>
+                        <div class="input-footer">
+                            <span id="character-count">0 / 50.000 ký tự</span>
+                            <button class="text-button" id="clear-button" type="button">Xóa nội dung</button>
+                        </div>
+                        <div class="threshold-control">
+                            <div class="threshold-label">
+                                <label for="threshold">Ngưỡng dự đoán</label>
+                                <output id="threshold-value" for="threshold">0,30</output>
+                            </div>
+                            <input id="threshold" name="threshold" type="range" min="0.05" max="0.95" step="0.05" value="0.30">
+                            <div class="range-hints"><span>Ít nhãn hơn</span><span>Nhiều nhãn hơn</span></div>
+                        </div>
+                        <p class="form-error" id="form-error" role="alert" hidden></p>
+                        <button class="primary-button" id="analyze-button" type="submit">
+                            <span>Phân tích bài viết</span><span class="button-arrow" aria-hidden="true">↗</span>
+                        </button>
+                        <p class="privacy-note"><span aria-hidden="true">⌑</span> Nội dung được xử lý cục bộ trên máy chủ của bạn.</p>
+                    </form>
+
+                    <aside class="panel guidance-panel">
+                        <div class="guidance-icon" aria-hidden="true">✳</div>
+                        <p class="eyebrow eyebrow-dark">CÁCH HOẠT ĐỘNG</p>
+                        <h3>Từ nội dung đến chủ đề</h3>
+                        <p class="guidance-copy">Mô hình đọc nội dung, chấm điểm từng nhãn độc lập, sau đó gom các nhãn phù hợp thành những nhóm chủ đề dễ khám phá.</p>
+                        <ol class="process-list">
+                            <li><span>1</span><div><strong>Tiền xử lý</strong><small>Chuẩn hóa văn bản tiếng Việt</small></div></li>
+                            <li><span>2</span><div><strong>Phân loại</strong><small>Chấm điểm 88 nhãn chủ đề</small></div></li>
+                            <li><span>3</span><div><strong>Gom nhóm</strong><small>Tóm tắt theo chủ đề ngữ nghĩa</small></div></li>
+                        </ol>
+                        <div class="threshold-note"><span aria-hidden="true">ⓘ</span><span>Ngưỡng mặc định <strong>0,30</strong> được chọn trên tập validation.</span></div>
+                    </aside>
+                </div>
+
+                <section class="results-section" id="results-section" aria-live="polite" hidden>
+                    <div class="section-heading results-heading">
+                        <div><p class="eyebrow eyebrow-dark">02 · KẾT QUẢ</p><h2>Phân tích hoàn tất</h2></div>
+                        <span class="result-status"><span class="status-dot"></span> Hoàn tất</span>
+                    </div>
+                    <div class="metrics-grid" id="result-metrics"></div>
+                    <div class="results-grid">
+                        <section class="panel result-panel">
+                            <div class="panel-heading"><div><p class="eyebrow eyebrow-dark">TỔNG QUAN</p><h3>Nhóm chủ đề</h3></div></div>
+                            <div class="group-list" id="result-groups"></div>
+                        </section>
+                        <section class="panel result-panel">
+                            <div class="panel-heading"><div><p class="eyebrow eyebrow-dark">NHÃN ĐẠT NGƯỠNG</p><h3>Nhãn dự đoán</h3></div></div>
+                            <div class="prediction-list" id="result-predictions"></div>
+                        </section>
+                    </div>
+                    <section class="panel result-panel top-labels-panel">
+                        <div class="panel-heading"><div><p class="eyebrow eyebrow-dark">XẾP HẠNG</p><h3>Top nhãn</h3></div><span class="muted-caption">10 nhãn có xác suất cao nhất</span></div>
+                        <div class="table-scroll"><table><thead><tr><th>HẠNG</th><th>NHÃN</th><th>XÁC SUẤT</th></tr></thead><tbody id="top-predictions"></tbody></table></div>
+                    </section>
+                    <details class="panel preprocessing-panel">
+                        <summary>Chi tiết tiền xử lý <span id="token-count"></span></summary>
+                        <pre id="clean-text"></pre>
+                    </details>
+                </section>
+            </section>
+
+            <section class="page" id="page-model" data-title="Mô hình" hidden>
+                <div class="page-intro">
+                    <p class="eyebrow eyebrow-dark">MODEL OVERVIEW</p><h1>Mô hình và pipeline</h1>
+                    <p>Quá trình inference từ văn bản đầu vào tới các nhóm chủ đề, sử dụng mô hình Word2Vec + LSTM đã huấn luyện.</p>
+                </div>
+                <div class="metrics-grid model-metrics" id="model-metrics"></div>
+                <section class="panel pipeline-panel">
+                    <div class="panel-heading"><div><p class="eyebrow eyebrow-dark">INFERENCE PIPELINE</p><h2>Từ văn bản đến nhãn</h2></div></div>
+                    <ol class="pipeline-steps">
+                        <li><span>01</span><strong>Văn bản</strong><small>Bài viết tiếng Việt</small></li>
+                        <li><span>02</span><strong>Chuẩn hóa</strong><small>Unicode NFC, chữ thường</small></li>
+                        <li><span>03</span><strong>Vector hóa</strong><small>TextVectorization</small></li>
+                        <li><span>04</span><strong>Dự đoán</strong><small>Word2Vec + LSTM</small></li>
+                        <li><span>05</span><strong>Gom nhóm</strong><small>Nhãn ngữ nghĩa</small></li>
+                    </ol>
+                </section>
+                <div class="info-grid">
+                    <section class="panel info-card"><span class="info-number">01</span><h3>Dự đoán đa nhãn</h3><p>Mỗi nhãn có một xác suất độc lập. Một bài viết có thể đồng thời nhận nhiều nhãn.</p></section>
+                    <section class="panel info-card"><span class="info-number">02</span><h3>Semantic Label Aggregation</h3><p>Các nhãn vượt ngưỡng được ánh xạ qua <code>label_to_group.json</code>. Nhóm chủ đề không thay thế các nhãn gốc.</p></section>
+                </div>
+                <p class="page-footnote">Ứng dụng chỉ inference bằng model đã huấn luyện; không huấn luyện lại khi dự đoán.</p>
+            </section>
+
+            <section class="page" id="page-semantic" data-title="Semantic Labels" hidden>
+                <div class="page-intro">
+                    <p class="eyebrow eyebrow-dark">LABEL EXPLORER</p><h1>Semantic Label Space</h1>
+                    <p>Khám phá các nhãn chủ đề và cách chúng được ánh xạ vào nhóm ngữ nghĩa.</p>
+                </div>
+                <div class="explorer-controls panel">
+                    <label class="search-field"><span aria-hidden="true">⌕</span><span class="sr-only">Tìm nhãn</span><input id="label-search" type="search" placeholder="Tìm nhãn..." autocomplete="off"></label>
+                    <label class="sr-only" for="group-filter">Lọc theo nhóm</label>
+                    <select id="group-filter"><option value="">Tất cả nhóm</option></select>
+                    <span class="subtle-badge" id="label-count">Đang tải nhãn...</span>
+                </div>
+                <div class="label-explorer-grid" id="label-explorer"></div>
+                <section class="panel semantic-map-panel" id="semantic-map-panel">
+                    <div class="panel-heading"><div><p class="eyebrow eyebrow-dark">VECTOR SPACE</p><h2>Bản đồ không gian nhãn</h2></div></div>
+                    <div id="semantic-map-content" class="empty-state">Đang kiểm tra dữ liệu không gian nhãn...</div>
+                </section>
+            </section>
+
+            <section class="page" id="page-experiments" data-title="Kết quả thực nghiệm" hidden>
+                <div class="page-intro">
+                    <p class="eyebrow eyebrow-dark">RESEARCH</p><h1>Kết quả thực nghiệm</h1>
+                    <p>Các bảng so sánh được tải từ những artifact CSV tùy chọn trong thư mục <code>artifacts</code>.</p>
+                </div>
+                <div class="experiment-grid">
+                    <section class="panel experiment-panel">
+                        <div class="panel-heading"><div><p class="eyebrow eyebrow-dark">MODEL EVALUATION</p><h2>So sánh mô hình</h2></div></div>
+                        <div id="model-comparison-content" class="empty-state">Đang tải kết quả...</div>
+                    </section>
+                    <section class="panel experiment-panel">
+                        <div class="panel-heading"><div><p class="eyebrow eyebrow-dark">PREPROCESSING</p><h2>Raw vs. filtered metrics</h2></div></div>
+                        <div id="raw-metrics-content" class="empty-state">Đang tải kết quả...</div>
+                    </section>
+                </div>
+            </section>
+
+            <footer class="app-footer"><span>Research demo · Vietnamese multi-label text classification</span><span>Word2Vec <span class="footer-plus">+</span> LSTM</span></footer>
+        </main>
+    </div>
+</body>
+</html>
