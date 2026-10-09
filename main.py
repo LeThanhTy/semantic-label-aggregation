@@ -97,8 +97,9 @@ async def home(request: Request):
     Main dashboard page.
     """
     return templates.TemplateResponse(
-        "index.html",
-        {
+        request=request,
+        name="index.html",
+        context={
             "request": request,
         },
     )
