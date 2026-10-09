@@ -104,21 +104,23 @@ async def home(request: Request):
         },
     )
 
-
 @app.get("/health")
 async def health():
-    """
-    Lightweight health-check endpoint.
+    return {
+        "status": "ok",
+        "model_loaded": _classifier is not None,
+    }
 
-    This endpoint intentionally does NOT load TensorFlow
-    or the ML model.
-    """
+"""
+@app.get("/health")
+async def health():
+
     return {
         "status": "ok",
         "service": "Vietnamese News Intelligence",
         "model_loaded": _classifier is not None,
     }
-
+"""
 
 # ============================================================
 # PREDICTION API
