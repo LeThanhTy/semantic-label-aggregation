@@ -104,14 +104,7 @@ async def home(request: Request):
         },
     )
 
-@app.get("/health")
-async def health():
-    return {
-        "status": "ok",
-        "model_loaded": _classifier is not None,
-    }
 
-"""
 @app.get("/health")
 async def health():
 
@@ -120,7 +113,6 @@ async def health():
         "service": "Vietnamese News Intelligence",
         "model_loaded": _classifier is not None,
     }
-"""
 
 # ============================================================
 # PREDICTION API
@@ -528,38 +520,7 @@ async def get_experiments():
 # OPTIONAL: MODEL STATUS
 # ============================================================
 
-@app.get("/api/status")
-async def get_status():
-    required_artifacts = [
-        "word2vec_lstm.keras",
-        "vocab.json",
-        "labels.json",
-        "label_to_group.json",
-    ]
 
-    artifacts = {}
-
-    for filename in required_artifacts:
-        path = ARTIFACT_DIR / filename
-
-        artifacts[filename] = {
-            "exists": path.exists(),
-            "size_mb": (
-                round(
-                    path.stat().st_size / (1024 * 1024),
-                    2,
-                )
-                if path.exists()
-                else None
-            ),
-        }
-
-    return {
-        "status": "ok",
-        "model_loaded": _classifier is not None,
-        "artifacts": artifacts,
-    }
-"""
 @app.get("/api/status")
 async def get_status():
 
@@ -595,7 +556,7 @@ async def get_status():
         "model_loaded": _classifier is not None,
         "artifacts": artifacts,
     }
-"""
+
 
 # ============================================================
 # LOCAL DEVELOPMENT
