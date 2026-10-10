@@ -231,7 +231,89 @@ async def predict(data: dict[str, Any]):
 # MODEL CONFIGURATION API
 # ============================================================
 
+@app.get("/api/config")
+async def get_config():
+    """
+    Return model configuration without loading TensorFlow
+    or the .keras model.
+    """
 
+    labels_path = ARTIFACT_DIR / "labels.json"
+
+    label_count = 0
+
+    try:
+        if labels_path.exists():
+            with labels_path.open(
+                "r",
+                encoding="utf-8",
+            ) as file:
+                labels_data = json.load(file)
+
+            if isinstance(labels_data, list):
+                label_count = len(labels_data)
+
+            elif isinstance(labels_data, dict):
+                label_count = len(labels_data)
+
+    except Exception:
+        label_count = 0
+
+    return {
+        "default_threshold": 0.30,
+
+        "model": {
+            "name": "Word2Vec + LSTM",
+            "label_count": label_count,
+            "embedding_dimensions": 100,
+            "lstm_units": 128,
+            "task": "Vietnamese Multi-Label Text Classification",
+        },
+
+        "model_loaded": _classifier is not None,
+
+        "artifacts": {
+            "model": (
+                ARTIFACT_DIR / "word2vec_lstm.keras"
+            ).exists(),
+
+            "vocab": (
+                ARTIFACT_DIR / "vocab.json"
+            ).exists(),
+
+            "labels": (
+                ARTIFACT_DIR / "labels.json"
+            ).exists(),
+
+            "semantic_groups": (
+                ARTIFACT_DIR / "label_to_group.json"
+            ).exists(),
+
+            "semantic_space": (
+                (
+                    ARTIFACT_DIR
+                    / "label_centroids.npy"
+                ).exists()
+                and
+                (
+                    ARTIFACT_DIR
+                    / "label_cluster_assignments.csv"
+                ).exists()
+            ),
+
+            "model_comparison": (
+                ARTIFACT_DIR
+                / "model_comparison.csv"
+            ).exists(),
+
+            "raw_vs_filtered_metrics": (
+                ARTIFACT_DIR
+                / "raw_vs_filtered_metrics.csv"
+            ).exists(),
+        },
+    }
+
+'''
 @app.get("/api/config")
 async def get_config():
     """
@@ -278,13 +360,75 @@ async def get_config():
                 "detail": str(exc),
             },
         )
-
+'''
 
 # ============================================================
 # LABEL API
 # ============================================================
 
+@app.get("/api/labels")
+async def get_labels():
 
+    labels_path = ARTIFACT_DIR / "labels.json"
+    groups_path = ARTIFACT_DIR / "label_to_group.json"
+
+    if not labels_path.exists():
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": "labels.json not found."
+            },
+        )
+
+    try:
+        with labels_path.open(
+            "r",
+            encoding="utf-8",
+        ) as file:
+            labels_data = json.load(file)
+
+        labels = (
+            labels_data
+            if isinstance(labels_data, list)
+            else list(labels_data.keys())
+        )
+
+        label_groups = {}
+
+        if groups_path.exists():
+            with groups_path.open(
+                "r",
+                encoding="utf-8",
+            ) as file:
+                label_groups = json.load(file)
+
+        result = []
+
+        for label in labels:
+
+            group = label_groups.get(label)
+
+            result.append({
+                "label": label,
+                "group": group,
+            })
+
+        return {
+            "count": len(result),
+            "labels": result,
+        }
+
+    except Exception as exc:
+
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": "Could not load labels.",
+                "detail": str(exc),
+            },
+        )
+
+'''
 @app.get("/api/labels")
 async def get_labels():
     """
@@ -324,7 +468,7 @@ async def get_labels():
                 "detail": str(exc),
             },
         )
-
+'''
 
 # ============================================================
 # SEMANTIC LABEL SPACE
